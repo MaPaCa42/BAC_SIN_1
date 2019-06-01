@@ -5,11 +5,10 @@
 #include <require_cpp11.h>
 #include <MFRC522.h>
 #include <deprecated.h>
-
-
 #include <LiquidCrystal.h>
+#include <Servo.h>
 
-
+  
 
 //Variables globales
 byte storedCard[4];    // Stores an ID read from EEPROM
@@ -28,6 +27,12 @@ uint8_t successRead; // Variable integer to keep if we have Successful Read from
 const int rs = 7, en = 6, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
+// Variables globales de gestion du moteur Servo
+Servo myservo;
+int pos = 0; 
+
+
+
 // Affectation des broches
 #define RST_PIN 9
 #define SS_PIN 10
@@ -35,7 +40,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);
 
 void setup() {
     // Initialisation du Module RFID
-    
+    myservo.attach(8); 
     Serial.begin(9600);
     while(!Serial);
     SPI.begin();
@@ -92,6 +97,16 @@ uint8_t getID() {
       // Print a message to the LCD.
       lcd.setCursor(0, 1);
       lcd.println("AUTHORIZED !");
+      for (pos = 0; pos <= 90; pos += 1) { // goes from 0 degrees to 180 degrees
+        // in steps of 1 degree
+        myservo.write(pos);              // tell servo to go to position in variable 'pos'
+        delay(15);                       // waits 15ms for the servo to reach the position
+      }
+      delay(5000);
+      for (pos = 90; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
+        myservo.write(pos);              // tell servo to go to position in variable 'pos'
+        delay(15);                       // waits 15ms for the servo to reach the position
+      }
   } else {
       Serial.println("NOT AUTHORIZED");
       // ici mettre le code pour écrire sur le LCD
