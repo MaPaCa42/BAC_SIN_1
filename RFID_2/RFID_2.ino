@@ -63,15 +63,6 @@ void loop() {
         successRead = getID(); 
     }
     while (!successRead);
-
-    /* Code déplacé dans la fonction getID()
-    // Attente d'une carte RFID
-    if( ! mfrc522.PICC_IsNewCardPresent()) {return;}
-    // Récupération des informations de la carte RFID
-    if( ! mfrc522.PICC_ReadCardSerial()) {return;}
-    // Affichagedes informations de la carte RFID
-    mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
-    */
 }
 
 // FONCTION DE RESSOURCE POUR UTILISATION DANS LA FONCTION LOOP
@@ -104,11 +95,13 @@ uint8_t getID() {
       // Print a message to the LCD.
       lcd.setCursor(0, 1);
       lcd.println("AUTHORIZED !");
+      // Boucle pour modifier la pos du Servo moteur pour ouvrir et fermer
       for (pos = 0; pos <= 90; pos += 1) { // goes from 0 degrees to 180 degrees
         // in steps of 1 degree
         myservo.write(pos);              // tell servo to go to position in variable 'pos'
         delay(15);                       // waits 15ms for the servo to reach the position
       }
+      // délais d'attende pour que le véhicule puisse passer 5 s. Capteur infra rouge pour fermeture.
       delay(5000);
       for (pos = 90; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
         myservo.write(pos);              // tell servo to go to position in variable 'pos'
@@ -140,13 +133,13 @@ void array_to_string(byte array[], unsigned int len, char buffer[])
     buffer[len*2] = '\0';
 }
 
-//////////////////////////////////////// Read an ID from EEPROM //////////////////////////////
+/* //////////////////////////////////////// Read an ID from EEPROM //////////////////////////////
 void readID( uint8_t number ) {
   uint8_t start = (number * 4 ) + 2;    // Figure out starting position
   for ( uint8_t i = 0; i < 4; i++ ) {     // Loop 4 times to get the 4 Bytes
     storedCard[i] = EEPROM.read(start + i);   // Assign values read from EEPROM to array
   }
-}
+} */
 
 //////////////////////////////////////// Function to compare readCard and MasterCardID ///////
 /*int CheckToken (uint8_t CTuid[7])
