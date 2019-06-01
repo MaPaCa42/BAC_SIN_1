@@ -1,16 +1,23 @@
 
-//Library To read and write PICC's UIDs from/to EEPROM
+//Librairie To read and write sur les périphériques : 
+// RFID, Ecran Cristaux liquides, potentiomètre, Servo moteur 
 #include <SPI.h>
 #include <EEPROM.h>
 #include <require_cpp11.h>
+
+// librairie pour la gestion du composant RFID
 #include <MFRC522.h>
 #include <deprecated.h>
+
+// librairie pour l'affichage sur l'écran à cristaux liquides
 #include <LiquidCrystal.h>
+
+// librairie pour la gestion du Servo Moteur pour gérer la barrière
 #include <Servo.h>
 
   
 
-//Variables globales
+// Les Variables globales pour stocker les val 
 byte storedCard[4];    // Stores an ID read from EEPROM
 byte readCard[4];      // Stores scanned ID read from RFID Module
 // Store Ref iD to compare with read ID
